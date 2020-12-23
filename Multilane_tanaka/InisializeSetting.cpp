@@ -7,11 +7,11 @@ void InisializeSetting::initialize() {
 	_setConstantValues();
 	_setStrategy();
 	_setInitializePosition();
+	_assignVmax();
 }
 
 void InisializeSetting::_setConstantValues() {
 	constants.per_cell = 5.6;
-	constants.Vmax = 5;
 	constants.G = 15;
 	constants.S = 2;
 	constants.r = 0.99;
@@ -86,6 +86,53 @@ void InisializeSetting::_setInitializePosition() {
 				else distance++;
 				position--;
 			}
+		}
+	}
+}
+
+void InisializeSetting::_assignVmax() {
+	constants.Vmax = std::vector<int>(N);
+	std::vector<int> Listofcar_notallowedtolanechange(0);
+	std::vector<int> Listofcar_lanechangeable(0);
+	int NumofOverspeeder = 0;
+	int NumofOrdinaryspeeder = 0;
+	int Numofslower = 0;
+	int NumofDstrategy = information.DCars.size();
+	for (int i = 0; i < N; ++i) {
+		if (i % 3 == 0) {
+			constants.Vmax[i] = 4;
+			++Numofslower;
+		}
+		if (i % 3 == 1) {
+			constants.Vmax[i] = 5;
+			++NumofOrdinaryspeeder;
+		}
+		if (i % 3 == 2) {
+			constants.Vmax[i] = 6;
+			++NumofOverspeeder;
+		}
+		if (car.strategy[i] == Car::StrategyKind::C) Listofcar_notallowedtolanechange.emplace_back();
+		if (car.strategy[i] == Car::StrategyKind::D) Listofcar_lanechangeable.emplace_back();
+	}
+	int cnt_assigned = 0;
+	for (int i = 0; i < NumofDstrategy; ++i) {
+		constants.Vmax[Listofcar_lanechangeable[i]] = 6;
+		++cnt_assigned;
+		if (cnt_assigned > NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 5;
+		if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 4;
+	}
+	for (int i = 0; i < N - NumofDstrategy; ++i) {
+		if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) {
+			constants.Vmax[Listofcar_notallowedtolanechange[i]] = 4;
+			++cnt_assigned;
+		}
+		else if (cnt_assigned > NumofOverspeeder) {
+			constants.Vmax[Listofcar_notallowedtolanechange[i]] = 5;
+			++cnt_assigned;
+		}
+		else {
+			constants.Vmax[Listofcar_notallowedtolanechange[i]] = 6;
+			++cnt_assigned;
 		}
 	}
 }

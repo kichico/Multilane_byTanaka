@@ -11,7 +11,7 @@ class InisializeSetting {
 private:
 	struct ConstantValues {
 		double per_cell;
-		int Vmax;
+		std::vector<int> Vmax;
 		int G;
 		int S;
 		double r;
@@ -37,6 +37,7 @@ private:
 	void _setConstantValues();
 	void _setStrategy();
 	void _setInitializePosition();
+	void _assignVmax();
 };
 
 #endif // !INISIALIZESETTING_H

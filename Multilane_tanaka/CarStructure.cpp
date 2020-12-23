@@ -9,8 +9,8 @@ void Car::initialize(int N) {
 	canditateVelocity = std::vector<int>(N);
 	arround = std::vector<FrontRearCar>(N);
 	mesure = std::vector<Mesurement>(N);
-	signal = std::vector<SignalKind>(N, SignalKind::Non);
-	strategy = std::vector<StrategyKind>(N);
+	signal = std::vector<int>(N, Car::SignalKind::Non);
+	strategy = std::vector<int>(N);
 }
 
 void Car::copyCurrentToPrevious() {

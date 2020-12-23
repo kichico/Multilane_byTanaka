@@ -4,8 +4,8 @@
 
 class MapInformation {
 public:
-	std::vector<std::vector<bool>> existance;
-	std::vector<std::vector<int>> CarID;
+	std::vector<std::vector<bool> > existance;
+	std::vector<std::vector<int> > CarID;
 	void initialize(int LaneNum, int L);
 };
 

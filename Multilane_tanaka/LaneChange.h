@@ -8,8 +8,9 @@ public:
 	void insentiveCheck();
 	bool laneChange();
 private:
-	enum WitchLane {
-		left, right
+	struct WhichLane {
+		static const int left = 0;
+		static const int right = 1;
 	};
 	struct ArroundData {
 		Car::FrontRearCar ID;
@@ -20,9 +21,9 @@ private:
 		int gap;
 	};
 	std::vector<int> laneChangeID;
-
+	WhichLane whichlane;
 	ArroundData _getArroundData(int laneNum, int ID);
-	InsentiveData _insentiveCheckForcusLane(WitchLane witchLane, int ID);
+	InsentiveData _insentiveCheckForcusLane(int Lane, int ID);
 	void _dicideUpdateOrder();
 	void _laneChangeID_emplace_back(std::vector<int>& samePositionID);
 };

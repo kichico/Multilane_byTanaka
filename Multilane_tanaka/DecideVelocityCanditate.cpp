@@ -16,7 +16,7 @@ void DecideVelocityCanditate::decideVelocity() {
 void DecideVelocityCanditate::_rule1(int ID) {
 	int front = car.arround[ID].front;
 	if (car.distance.current[ID] >= constants.G || car.canditateVelocity[ID] <= car.velocity.current[front]) {
-		if (car.canditateVelocity[ID] < constants.Vmax) {
+		if (car.canditateVelocity[ID] < constants.Vmax[ID]) {
 			car.canditateVelocity[ID]++;
 		}
 	}

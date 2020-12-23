@@ -9,11 +9,14 @@ private:
 		std::vector<int> previous;
 	};
 public:
-	enum SignalKind {
-		Non, Right, Left
+	struct SignalKind {
+		static const int Non = 0;
+		static const int Right = 1;
+		static const int Left = 2;
 	};
-	enum StrategyKind {
-		C, D
+	struct StrategyKind {
+		static const int C = 0;
+		static const int D = 1;
 	};
 	struct FrontRearCar {
 		int front;
@@ -31,8 +34,8 @@ public:
 	std::vector<int> canditateVelocity;
 	std::vector<FrontRearCar> arround;
 	std::vector<Mesurement> mesure;
-	std::vector<SignalKind> signal;
-	std::vector<StrategyKind> strategy;
+	std::vector<int> signal;
+	std::vector<int> strategy;
 	void initialize(int N);
 	void copyCurrentToPrevious();
 };

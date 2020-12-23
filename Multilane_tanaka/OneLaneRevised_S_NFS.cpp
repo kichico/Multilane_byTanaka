@@ -7,12 +7,12 @@ OneLaneRevised_S_NFS::OneLaneRevised_S_NFS(int filenumber,int LaneNum, int L) {
 }
 
 void OneLaneRevised_S_NFS::calculate() {
-	std::string f1 = "Result/Local" + std::to_string(filenumber) + ".dat";
-	std::string f2 = "Result/Global" + std::to_string(filenumber) + ".dat";
+	std::string f1 = "Result/Local" + to_string(filenumber) + ".dat";
+	std::string f2 = "Result/Global" + to_string(filenumber) + ".dat";
 	const char* F1 = f1.c_str();
 	const char* F2 = f2.c_str();
 	std::ifstream ifs(F2);
-	std::vector<bool> NFinished((L * LaneNum) / 10, false);
+	std::vector<bool> NFinished((L * LaneNum) / 75, false);
 	if (ifs) {
 		std::string SLine, S;
 		while (std::getline(ifs, SLine)) {
@@ -27,7 +27,7 @@ void OneLaneRevised_S_NFS::calculate() {
 	std::ofstream ofs1(F1, std::ios::app);
 	std::ofstream ofs2(F2, std::ios::app);
 	std::vector<int> NLists;
-	for (int i = 0; i < NFinished.size(); i++) if (!NFinished[i]) NLists.push_back((i + 1) * 10);
+	for (int i = 0; i < NFinished.size(); i++) if (!NFinished[i]) NLists.push_back((i + 1) * 75);
 #ifdef _OPENMP
 #pragma omp parallel for schedule(guided)
 #endif
@@ -56,8 +56,8 @@ void OneLaneRevised_S_NFS::calculate() {
 		}
 		std::string forCout, forOfs2;
 		std::vector<std::string> forOfs1(LaneNum);
-		forCout = std::to_string(rho);
-		forOfs2 = std::to_string(N) + "," + std::to_string(rho);
+		forCout = to_string(rho);
+		forOfs2 = to_string(N) + "," + to_string(rho);
 		for (int i = 0; i < LaneNum; i++) {
 			double av, k;
 			int Q = DoCal->information.eachLaneResults[i].CountNum - 1;
@@ -70,9 +70,9 @@ void OneLaneRevised_S_NFS::calculate() {
 				Q = 0;
 				av = k = 0;
 			}
-			forCout += ", " + std::to_string(Q);
-			forOfs1[i] = std::to_string(k) + "," + std::to_string(Q);
-			forOfs2 += "," + std::to_string(Q);
+			forCout += ", " + to_string(Q);
+			forOfs1[i] = to_string(k) + "," + to_string(Q);
+			forOfs2 += "," + to_string(Q);
 		}
 #ifdef _OPENMP
 #pragma omp critical

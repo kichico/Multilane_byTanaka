@@ -4,9 +4,9 @@ void LaneChange::insentiveCheck() {
 	laneChangeID.clear();
 	for (int i = 0; i < information.DCars.size(); i++) {
 		int ID = information.DCars[i];
-		InsentiveData leftData = _insentiveCheckForcusLane(WitchLane::left, ID);
-		InsentiveData rightData = _insentiveCheckForcusLane(WitchLane::right, ID);
-		Car::SignalKind signal;
+		InsentiveData leftData = _insentiveCheckForcusLane(WhichLane::left, ID);
+		InsentiveData rightData = _insentiveCheckForcusLane(WhichLane::right, ID);
+		int signal;
 		if (leftData.motivated && rightData.motivated) {
 			if (leftData.gap > rightData.gap) signal = Car::SignalKind::Left;
 			else if (leftData.gap < rightData.gap) signal = Car::SignalKind::Right;
@@ -161,10 +161,10 @@ LaneChange::ArroundData LaneChange::_getArroundData(int laneNum, int ID) {
 	return arroundData;
 }
 
-LaneChange::InsentiveData LaneChange::_insentiveCheckForcusLane(WitchLane witchLane, int ID) {
+LaneChange::InsentiveData LaneChange::_insentiveCheckForcusLane(int Lane, int ID) {
 	InsentiveData insentiveData;
 	int laneNum = car.laneNumber.current[ID];
-	if (witchLane == WitchLane::left) laneNum--;
+	if (Lane == WhichLane::left) laneNum--;
 	else laneNum++;
 	if (0 <= laneNum && laneNum < LaneNum) {
 		if (information.eachLaneCarNum[laneNum] == 0) {
