@@ -92,8 +92,8 @@ void InisializeSetting::_setInitializePosition() {
 
 void InisializeSetting::_assignVmax() {
 	constants.Vmax = std::vector<int>(N);
-	std::vector<int> Listofcar_notallowedtolanechange(0);
-	std::vector<int> Listofcar_lanechangeable(0);
+	Listofcar_lanechangeable = std::vector<int>(0);
+	Listofcar_notallowedtolanechange = std::vector<int>(0);
 	int NumofOverspeeder = 0;
 	int NumofOrdinaryspeeder = 0;
 	int Numofslower = 0;
@@ -117,9 +117,9 @@ void InisializeSetting::_assignVmax() {
 	int cnt_assigned = 0;
 	for (int i = 0; i < NumofDstrategy; ++i) {
 		constants.Vmax[Listofcar_lanechangeable[i]] = 6;
-		++cnt_assigned;
 		if (cnt_assigned > NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 5;
 		if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 4;
+		++cnt_assigned;
 	}
 	for (int i = 0; i < N - NumofDstrategy; ++i) {
 		if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) {

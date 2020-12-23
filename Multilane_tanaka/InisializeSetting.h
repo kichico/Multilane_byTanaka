@@ -32,6 +32,8 @@ public:
 	Car car;
 	MapInformation map;
 	Information information;
+	std::vector<int> Listofcar_lanechangeable;
+	std::vector<int> Listofcar_notallowedtolanechange;
 	void initialize();
 private:
 	void _setConstantValues();

@@ -12,6 +12,8 @@ private:
 	int filenumber;
 	int LaneNum;
 	int L;
+	double ave_C;
+	double ave_D;
 };
 
 #endif // !ONELANEREVISED_SNFS_H
