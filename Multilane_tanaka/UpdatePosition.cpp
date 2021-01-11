@@ -47,6 +47,11 @@ UpdatePosition::NextInfomrations UpdatePosition::updatePosition(bool DoMesure) {
 				nextInfo.mesure = next_mesurement;
 				nextInfo.eachLaneResults[i] = nextForcusLaneResults;
 				nextInfo.allResults = nextAllResults;
+				for (int i = 0; i < N; ++i) {
+					if (car.strategy[i] == Car::StrategyKind::C) information.ave_C += car.velocity.current[i];
+					else if (car.strategy[i] == Car::StrategyKind::D) information.ave_D += car.velocity.current[i];
+					//std::cout << i << "th car velocity is " << car.velocity.current[i] << std::endl;
+				}
 			}
 		}
 	}

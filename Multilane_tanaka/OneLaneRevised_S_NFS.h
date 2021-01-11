@@ -1,6 +1,6 @@
 #ifndef ONELANEREVISED_S_NFS_H
 #define ONELANEREVISED_S_NFS_H
-#include <String>
+#include <string>
 #include <sstream>
 #include "UpdatePosition.h"
 
@@ -12,8 +12,8 @@ private:
 	int filenumber;
 	int LaneNum;
 	int L;
-	double ave_C;
-	double ave_D;
+	//double ave_C=0;
+	//double ave_D=0;
 };
 
 #endif // !ONELANEREVISED_SNFS_H

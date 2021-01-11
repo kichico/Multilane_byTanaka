@@ -98,41 +98,63 @@ void InisializeSetting::_assignVmax() {
 	int NumofOrdinaryspeeder = 0;
 	int Numofslower = 0;
 	int NumofDstrategy = information.DCars.size();
-	for (int i = 0; i < N; ++i) {
-		if (i % 3 == 0) {
-			constants.Vmax[i] = 4;
-			++Numofslower;
+	bool flg_distribute = true;
+	bool flg_correlated = true;
+	std::vector<int> assign(N, 0);
+	if (flg_correlated == false && flg_distribute == false) for (int i = 0; i < N; ++i) constants.Vmax[i] = 5;
+	if (flg_distribute == true && flg_correlated == false) {
+		for (int i = 0; i < N; ++i) {
+			if (i % 3 == 0) {
+				assign[i] = 4;
+				++Numofslower;
+			}
+			if (i % 3 == 1) {
+				assign[i] = 5;
+				++NumofOrdinaryspeeder;
+			}
+			if (i % 3 == 2) {
+				assign[i] = 6;
+				++NumofOverspeeder;
+			}
+			if (car.strategy[i] == Car::StrategyKind::C) Listofcar_notallowedtolanechange.push_back(i);
+			if (car.strategy[i] == Car::StrategyKind::D) Listofcar_lanechangeable.push_back(i);
 		}
-		if (i % 3 == 1) {
-			constants.Vmax[i] = 5;
-			++NumofOrdinaryspeeder;
+		std::vector<int> rem(N);
+		for (int i = 0; i < rem.size(); i++) rem[i] = i;
+		for (int i = 0; i < N; i++) {
+			int rem_size = rem.size() - 1;
+			int xrem = random->random(rem_size);
+			int pickedupvelocity = rem[xrem];
+			std::iter_swap(rem.begin() + xrem, rem.end() - 1);
+			rem.pop_back();
+			constants.Vmax[i] = assign[pickedupvelocity];
 		}
-		if (i % 3 == 2) {
-			constants.Vmax[i] = 6;
-			++NumofOverspeeder;
-		}
-		if (car.strategy[i] == Car::StrategyKind::C) Listofcar_notallowedtolanechange.emplace_back();
-		if (car.strategy[i] == Car::StrategyKind::D) Listofcar_lanechangeable.emplace_back();
 	}
-	int cnt_assigned = 0;
-	for (int i = 0; i < NumofDstrategy; ++i) {
-		constants.Vmax[Listofcar_lanechangeable[i]] = 6;
-		if (cnt_assigned > NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 5;
-		if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 4;
-		++cnt_assigned;
-	}
-	for (int i = 0; i < N - NumofDstrategy; ++i) {
-		if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) {
-			constants.Vmax[Listofcar_notallowedtolanechange[i]] = 4;
+	if (flg_correlated == true && flg_distribute == true) {
+		for (int i = 0; i < N; ++i) {
+			if (car.strategy[i] == Car::StrategyKind::C) Listofcar_notallowedtolanechange.push_back(i);
+			if (car.strategy[i] == Car::StrategyKind::D) Listofcar_lanechangeable.push_back(i);
+		}
+		int cnt_assigned = 0;
+		for (int i = 0; i < NumofDstrategy; ++i) {
+			constants.Vmax[Listofcar_lanechangeable[i]] = 6;
+			if (cnt_assigned > NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 5;
+			if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) constants.Vmax[Listofcar_lanechangeable[i]] = 4;
 			++cnt_assigned;
 		}
-		else if (cnt_assigned > NumofOverspeeder) {
-			constants.Vmax[Listofcar_notallowedtolanechange[i]] = 5;
-			++cnt_assigned;
-		}
-		else {
-			constants.Vmax[Listofcar_notallowedtolanechange[i]] = 6;
-			++cnt_assigned;
+		for (int i = 0; i < N - NumofDstrategy; ++i) {
+			if (cnt_assigned > NumofOrdinaryspeeder + NumofOverspeeder) {
+				constants.Vmax[Listofcar_notallowedtolanechange[i]] = 4;
+				++cnt_assigned;
+			}
+			else if (cnt_assigned > NumofOverspeeder) {
+				constants.Vmax[Listofcar_notallowedtolanechange[i]] = 5;
+				++cnt_assigned;
+			}
+			else {
+				constants.Vmax[Listofcar_notallowedtolanechange[i]] = 6;
+				++cnt_assigned;
+			}
 		}
 	}
 }

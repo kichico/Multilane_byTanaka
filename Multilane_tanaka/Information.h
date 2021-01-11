@@ -17,6 +17,8 @@ public:
 	std::vector<Statics> eachLaneResults;
 	Statics allResults;
 	std::vector<int> DCars;
+	double ave_C = 0;
+	double ave_D = 0;
 	void initilaize(int LaneNum);
 };
 

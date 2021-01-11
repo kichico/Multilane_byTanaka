@@ -19,7 +19,7 @@ void LaneChange::insentiveCheck() {
 		else if (!leftData.motivated && rightData.motivated) signal = Car::SignalKind::Right;
 		else signal = Car::SignalKind::Non;
 		car.signal[ID] = signal;
-		if (signal != Car::SignalKind::Non) laneChangeID.emplace_back(ID);
+		if (signal != Car::SignalKind::Non) laneChangeID.push_back(ID);
 	}
 }
 
@@ -197,7 +197,7 @@ LaneChange::InsentiveData LaneChange::_insentiveCheckForcusLane(int Lane, int ID
 void LaneChange::_dicideUpdateOrder() {
 	//まずは車線変更を開始するポジションを各車線の先頭車両の中から等確率で選出する
 	std::vector<int> canditates;
-	for (int i = 0; i < information.leadCar.size(); i++) if (information.leadCar[i].existence) canditates.emplace_back(car.position.current[information.leadCar[i].ID]);
+	for (int i = 0; i < information.leadCar.size(); i++) if (information.leadCar[i].existence) canditates.push_back(car.position.current[information.leadCar[i].ID]);
 	int size = canditates.size() - 1;
 	int xc = random->random(size);
 	int position = canditates[xc];
@@ -213,8 +213,8 @@ void LaneChange::_dicideUpdateOrder() {
 		int p = car.position.current[ID];
 		if (p <= position) p += correctionValue;
 		else p -= (position + 1);
-		dummyPosition.emplace_back(p);
-		dummyID.emplace_back(ID);
+		dummyPosition.push_back(p);
+		dummyID.push_back(ID);
 	}
 	Sort sort;
 	sort.descending_sort(dummyPosition);
@@ -225,7 +225,7 @@ void LaneChange::_dicideUpdateOrder() {
 	laneChangeID.clear();
 	while (n < dummyPosition.size()) {
 		ID = dummyID[sort.number[n]];
-		if (lastP == dummyPosition[n]) samePositionID.emplace_back(ID);
+		if (lastP == dummyPosition[n]) samePositionID.push_back(ID);
 		else {
 			_laneChangeID_emplace_back(samePositionID);
 			lastP = dummyID[n];
@@ -247,6 +247,6 @@ void LaneChange::_laneChangeID_emplace_back(std::vector<int>& samePositionID) {
 		ID = samePositionID[x];
 		std::iter_swap(samePositionID.begin() + x, samePositionID.end() - 1);
 		samePositionID.pop_back();
-		laneChangeID.emplace_back(ID);
+		laneChangeID.push_back(ID);
 	}
 }
